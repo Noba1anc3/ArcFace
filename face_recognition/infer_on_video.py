@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
     utils.inference(conf, args, targets, names, learner, face_detecter)
 
-    #targets, names = utils.add_face_single(conf, learner.model, face_detecter, username = '小王', photo_path = 'data/facebank/彩/彩_1.jpg')
+    #targets, names = utils.add_face_single(conf, learner.model, face_detecter, username = '森', photo_path = 'data/facebank/mimori/mimori_1.jpg')
     #targets, names = utils.add_face_multiple(conf, learner.model, face_detecter, username = 'usrname', folder_path = 'data/folder')
-    #targets, names = utils.add_pic_over_camera(conf, learner.model, face_detecter, name = '张轩瑞')
+    #targets, names = utils.add_pic_over_camera(conf, learner.model, face_detecter, name = 'usrname')
 
     #utils.inference(conf, args, targets, names, learner, face_detecter)
