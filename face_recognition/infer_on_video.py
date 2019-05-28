@@ -15,13 +15,14 @@ if __name__ == '__main__':
     parser.add_argument("-tta", "--tta", help = "whether test time augmentation", action = "store_true")
     parser.add_argument("-fin", "--file_name", help = "video file name", default = 'video.mp4', type = str)
     parser.add_argument("-fout", "--save_name", help = "output file name", default = 'out_stream.avi', type = str)
+    parser.add_argument('-s','--source', help = 'ip means ip_camera, local means video file', default = 'ip', type = str)
 
-    parser.add_argument('-t','--threshold',help='threshold to decide identical faces', default = 1)
-    parser.add_argument("-g", "--gap", help = "how often does the algorithm run", default = 12, type = int)
+    parser.add_argument('-t','--threshold',help = 'threshold to decide identical faces', default = 0.6)
+    parser.add_argument("-g", "--gap", help = "how often does the algorithm run", default = 1, type = int)
 
-    parser.add_argument("-sa", "--save", help = "whether save", default = False, action = "store_true")
+    parser.add_argument("-sa", "--save", help = "whether save", default = True, action = "store_true")
     parser.add_argument("-sc", "--score", help = "whether show the confidence score", default = False, action = "store_true")
-    parser.add_argument("-u", "--update", help = "whether perform update the facebank", default = False, action = "store_true")
+    parser.add_argument("-u", "--update", help = "whether perform update the facebank", default = True, action = "store_true")
     args = parser.parse_args()
 
     conf = get_config(False)

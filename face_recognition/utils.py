@@ -38,12 +38,18 @@ def separate_bn_paras(modules):
 def inference(conf, args, targets, names, learner, face_detecter):
     num_of_frame = 0
     learner.threshold = args.threshold
-    cap = cv2.VideoCapture(str(conf.facebank_path/args.file_name))
+
+    if args.source == 'ip':
+        cam_url = 'http://admin:admin@10.6.6.242:8081/'
+        cap = cv2.VideoCapture(cam_url)
+    elif args.source == 'local':
+        cap = cv2.VideoCapture(str(conf.facebank_path/args.file_name))
+
     cap.set(cv2.CAP_PROP_POS_MSEC, 0)
     video_fps = '%.1f'%(cap.get(cv2.CAP_PROP_FPS))
     begin = time.time()
     if args.save:
-        video_writer = cv2.VideoWriter(str(conf.facebank_path/'{}'.format(args.save_name)),cv2.VideoWriter_fourcc(*'XVID'), int(video_fps), (1920,1080))
+        video_writer = cv2.VideoWriter(str(conf.facebank_path/'{}'.format(args.save_name)),cv2.VideoWriter_fourcc(*'XVID'), float(video_fps), (1920,1080))
     while cap.isOpened():
         isSuccess,frame = cap.read()
         if isSuccess:
@@ -69,20 +75,23 @@ def inference(conf, args, targets, names, learner, face_detecter):
 
             num_of_frame += 1
             now = time.time()
-            second_video = '%.1f'%(num_of_frame/25)         #time of video since start
-            second_real = '%.1f'%(now - begin)              #time of algorithm since start
-            fps = '%.0f'%(1/(now - start))                  #current frame per second
-            avg_fps = '%.0f'%(num_of_frame/(now - begin))   #average frame per second on processing the video
+            second_video = '%.1f'%(num_of_frame/int(video_fps[:-2]))         #time of video since start
+            second_real  = '%.1f'%(now - begin)                              #time of algorithm since start
+            fps = '%.0f'%(1/(now - start))                                   #current frame per second
+            avg_fps = '%.0f'%(num_of_frame/(now - begin))                    #average frame per second on processing the video
             speed_rate = 100
             if float(second_real) != 0:
                 speed_rate = '%.0f'%(100*float(second_video)/float(second_real))
 
             fps = 'VideoFPS: ' + video_fps + '  AvgFPS:' + avg_fps + '  FPS:' + fps + '  ' + second_video + 's' + '  Speed:' + str(speed_rate) + '%'
-            frame = draw_fps(fps, frame)
+            if args.source == 'local':
+                frame = draw_fps(fps, frame)
+            elif args.source == 'ip':
+                frame = draw_fps_ipcamera(fps, frame)
 
             cv2.imshow('Out Stream',frame)
 
-            if num_of_frame % 25 == 0:
+            if num_of_frame % int(video_fps[:-2]) == 0:
                 print('Video Time: ' + second_video + 's' + '  ' + 'Real Time: ' + second_real + 's')
 
             if args.save:
@@ -625,6 +634,17 @@ def draw_fps(fps,frame):
     draw = ImageDraw.Draw(pilimg)
     font = ImageFont.truetype("wqy-microhei.ttc", 20)
     draw.text((0,0), fps, (0,0,255), font=font)
+    frame = cv2.cvtColor(np.array(pilimg), cv2.COLOR_RGB2BGR)
+
+    return frame
+
+def draw_fps_ipcamera(fps,frame):
+    cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    pilimg = Image.fromarray(cv2img)
+
+    draw = ImageDraw.Draw(pilimg)
+    font = ImageFont.truetype("wqy-microhei.ttc", 20)
+    draw.text((7,50), fps, (0,0,255), font=font)
     frame = cv2.cvtColor(np.array(pilimg), cv2.COLOR_RGB2BGR)
 
     return frame
