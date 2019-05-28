@@ -392,7 +392,7 @@ def add_user(conf, username):
     else:
         print("增加新用户失败, " + username + " 的人脸库已经存在")
 
-def add_pic_over_camera(conf, model, face_detector, name):
+def add_pic_over_camera(conf, args, model, face_detector, name):
     """ Take a pic from camera, and then add the pic to its user's folder path
         if usr's folder doesn't exists, create a folder in the facebank for the usr
         Then, update the facebank and return new targets and names
@@ -416,9 +416,13 @@ def add_pic_over_camera(conf, model, face_detector, name):
     face_path = str(save_path / Path(name + "_" + str(count) + ".jpg"))
     face_filename = str(Path(name + "_" + str(count) + ".jpg"))
 
-    cap = cv2.VideoCapture(0)
-    cap.set(3, 1280)
-    cap.set(4, 720)
+    if args.source == 'local':
+        cap = cv2.VideoCapture(0)
+        cap.set(3, 1280)
+        cap.set(4, 720)
+    elif args.source == 'ip':
+        cam_url = 'http://admin:admin@10.6.6.242:8081/'
+        cap = cv2.VideoCapture(cam_url)
 
     while cap.isOpened():
         isSuccess, frame = cap.read()

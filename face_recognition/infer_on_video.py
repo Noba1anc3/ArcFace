@@ -18,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-s','--source', help = 'ip means ip_camera, local means video file', default = 'ip', type = str)
 
     parser.add_argument('-t','--threshold',help = 'threshold to decide identical faces', default = 0.6)
-    parser.add_argument("-f", "--frequency", help = "how often does the algorithm run (s)", default = 2/3, type = float)
+    parser.add_argument("-f", "--frequency", help = "how often does the algorithm run (s)", default = 4/5, type = float)
 
     parser.add_argument("-sa", "--save", help = "whether save or not", default = True, action = "store_true")
     parser.add_argument("-sc", "--score", help = "whether show the confidence score", default = False, action = "store_true")
@@ -38,10 +38,11 @@ if __name__ == '__main__':
     else:
         targets, names = utils.load_facebank(conf)
 
+    #targets, names = utils.add_pic_over_camera(conf, args, learner.model, face_detecter, name = '孔舒晨')
     utils.inference(conf, args, targets, names, learner, face_detecter)
 
     #targets, names = utils.add_face_single(conf, learner.model, face_detecter, username = '森', photo_path = 'data/facebank/mimori/mimori_1.jpg')
     #targets, names = utils.add_face_multiple(conf, learner.model, face_detecter, username = 'usrname', folder_path = 'data/folder')
-    #targets, names = utils.add_pic_over_camera(conf, learner.model, face_detecter, name = 'usrname')
+
 
     #utils.inference(conf, args, targets, names, learner, face_detecter)
