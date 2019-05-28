@@ -47,6 +47,8 @@ def inference(conf, args, targets, names, learner, face_detecter):
 
     cap.set(cv2.CAP_PROP_POS_MSEC, 0)
     video_fps = '%.1f'%(cap.get(cv2.CAP_PROP_FPS))
+    gap_of_frame = int(args.frequency*float(video_fps))
+    print(gap_of_frame)
     begin = time.time()
     if args.save:
         video_writer = cv2.VideoWriter(str(conf.facebank_path/'{}'.format(args.save_name)),cv2.VideoWriter_fourcc(*'XVID'), float(video_fps), (1920,1080))
@@ -57,7 +59,7 @@ def inference(conf, args, targets, names, learner, face_detecter):
             image = Image.fromarray(frame[...,::-1])
             image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)  # PIL TO NUMPY
 
-            if num_of_frame % args.gap == 0:
+            if num_of_frame % gap_of_frame == 0:
                 try:
                     bboxes, faces, landmarks = face_detecter.infer(image)
                 except:
