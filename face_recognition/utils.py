@@ -40,7 +40,7 @@ def inference(conf, args, targets, names, learner, face_detecter):
     learner.threshold = args.threshold
 
     if args.source == 'ip':
-        cam_url = 'http://admin:admin@10.6.6.242:8081/'
+        cam_url = 'http://admin:admin@10.5.1.7:8081/'
         cap = cv2.VideoCapture(cam_url)
     elif args.source == 'local':
         cap = cv2.VideoCapture(str(conf.facebank_path/args.file_name))
@@ -48,10 +48,9 @@ def inference(conf, args, targets, names, learner, face_detecter):
     cap.set(cv2.CAP_PROP_POS_MSEC, 0)
     video_fps = '%.1f'%(cap.get(cv2.CAP_PROP_FPS))
     gap_of_frame = int(args.frequency*float(video_fps))
-    print(gap_of_frame)
     begin = time.time()
     if args.save:
-        video_writer = cv2.VideoWriter(str(conf.facebank_path/'{}'.format(args.save_name)),cv2.VideoWriter_fourcc(*'XVID'), float(video_fps), (1920,1080))
+        video_writer = cv2.VideoWriter(str(conf.facebank_path/'{}'.format(args.save_name)),cv2.VideoWriter_fourcc(*'XVID'), float(video_fps), (960,720))
     while cap.isOpened():
         isSuccess,frame = cap.read()
         if isSuccess:

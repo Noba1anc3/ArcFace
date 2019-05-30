@@ -18,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-s','--source', help = 'ip means ip_camera, local means video file', default = 'ip', type = str)
 
     parser.add_argument('-t','--threshold',help = 'threshold to decide identical faces', default = 0.6)
-    parser.add_argument("-f", "--frequency", help = "how often does the algorithm run (s)", default = 4/5, type = float)
+    parser.add_argument("-f", "--frequency", help = "how often does the algorithm run (s)", default = 3/4, type = float)
 
     parser.add_argument("-sa", "--save", help = "whether save or not", default = True, action = "store_true")
     parser.add_argument("-sc", "--score", help = "whether show the confidence score", default = False, action = "store_true")
